@@ -21,13 +21,8 @@ public class CategoryController {
 
 
     @GetMapping(value = "/categories")
-    public ModelAndView getAll(ModelAndView mw) {
-        List<Category> categories = categoryService.getAll()
-                .orElseGet(Collections::emptyList);
-
-        mw.addObject("categories", categories);
-        mw.setViewName("categories");
-        return mw;
+    public ModelAndView getAll() {
+        return getAllCategoriesAndBindToMw();
     }
 
     @GetMapping(value = "/add-category")
@@ -38,14 +33,9 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/add-category")
-    public ModelAndView create(@ModelAttribute Category category, ModelAndView mw) {
+    public ModelAndView create(@ModelAttribute Category category) {
         categoryService.create(category);
-        List<Category> categories = categoryService.getAll()
-                .orElseGet(Collections::emptyList);
-
-        mw.addObject("categories", categories);
-        mw.setViewName("categories");
-        return mw;
+        return getAllCategoriesAndBindToMw();
     }
 
     @GetMapping(value = "/edit-category")
@@ -56,13 +46,22 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/edit-category")
-    public ModelAndView edit(@ModelAttribute Category category, ModelAndView mw) {
+    public ModelAndView edit(@ModelAttribute Category category) {
         categoryService.update(category);
+        return getAllCategoriesAndBindToMw();
+    }
 
-        List<Category> categories = categoryService.getAll()
+    @GetMapping(value = "/delete-category")
+    public ModelAndView delete(@RequestParam("c_id") Long id, ModelAndView mw) {
+        categoryService.delete(id);
+        return getAllCategoriesAndBindToMw();
+    }
+
+    private ModelAndView getAllCategoriesAndBindToMw() {
+        List<Category> list = categoryService.getAll()
                 .orElseGet(Collections::emptyList);
-
-        mw.addObject("categories", categories);
+        ModelAndView mw = new ModelAndView();
+        mw.addObject("categories", list);
         mw.setViewName("categories");
         return mw;
     }

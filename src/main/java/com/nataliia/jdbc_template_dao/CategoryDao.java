@@ -1,4 +1,4 @@
-package com.nataliia.dao;
+package com.nataliia.jdbc_template_dao;
 
 import com.nataliia.model.Category;
 
@@ -14,4 +14,6 @@ public interface CategoryDao {
     Optional<Category> getById(Long id);
 
     Optional<Category> update(Category category);
+
+    void delete(Long id);
 }

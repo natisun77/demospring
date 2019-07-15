@@ -1,4 +1,4 @@
-package com.nataliia.dao.templates;
+package com.nataliia.jdbc_template_dao.templates;
 
 import com.nataliia.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import java.util.Optional;
 
 import static java.sql.Types.BIGINT;
 
-@Component
+//@Component
 public class CategoryJdbcTemplate {
 
-    @Autowired
+  //  @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public Optional<List<Category>> getAll() {
@@ -74,5 +74,14 @@ public class CategoryJdbcTemplate {
         });
         // TODO fix return value
         return Optional.of(category);
+    }
+
+    public void delete(Long id) {
+        String query = "DELETE FROM CATEGORIES WHERE ID = ?";
+
+        jdbcTemplate.update(query, ps -> {
+            ps.setLong(1, id);
+            ps.executeUpdate();
+        });
     }
 }

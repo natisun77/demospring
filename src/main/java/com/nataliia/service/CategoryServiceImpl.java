@@ -1,6 +1,7 @@
 package com.nataliia.service;
 
-import com.nataliia.dao.CategoryDao;
+import com.nataliia.dao.CategoryRepository;
+import com.nataliia.jdbc_template_dao.CategoryDao;
 import com.nataliia.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,25 +13,31 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    private CategoryDao categoryDao;
+    private CategoryRepository categoryRepository;
 
     @Override
     public Optional<List<Category>> getAll() {
-        return categoryDao.getAll();
+        return Optional.of(categoryRepository.findAll());
     }
 
     @Override
     public Optional<Category> create(Category category) {
-        return categoryDao.create(category);
+        return Optional.of(categoryRepository.save(category));
     }
 
     @Override
     public Optional<Category> getById(Long id) {
-        return categoryDao.getById(id);
+        return categoryRepository.findById(id);
     }
 
     @Override
     public Optional<Category> update(Category category) {
-        return categoryDao.update(category);
+        return Optional.of(categoryRepository.save(category));
     }
+
+    @Override
+    public void delete(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
 }
