@@ -20,6 +20,16 @@ public class CategoryController {
     private CategoryService categoryService;
 
 
+    @PostMapping(value = "/test")
+    public ModelAndView test(@ModelAttribute Category category, ModelAndView mw) {
+        Category result = categoryService.increaseProductsPriceBy10P(category)
+                .orElseGet(Category::new);
+
+        mw.addObject("category", result);
+        mw.setViewName("edit-category");
+        return mw;
+    }
+
     @GetMapping(value = "/categories")
     public ModelAndView getAll() {
         return getAllCategoriesAndBindToMw();
@@ -40,7 +50,9 @@ public class CategoryController {
 
     @GetMapping(value = "/edit-category")
     public ModelAndView edit(@RequestParam("c_id") Long id, ModelAndView mw) {
-        mw.addObject("category", categoryService.getById(id));
+        Category result = categoryService.getByIdWithProducts(id)
+                .orElseGet(Category::new);
+        mw.addObject("category", result);
         mw.setViewName("edit-category");
         return mw;
     }

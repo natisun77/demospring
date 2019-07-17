@@ -29,7 +29,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("com.nataliia")
 @EnableTransactionManagement
-@EnableJpaRepositories(value = { "com.nataliia.jdbc_template_dao", "com.nataliia.dao"})
+@EnableJpaRepositories(value = "com.nataliia.dao")
 @PropertySource("classpath:application.properties")
 public class ApplicationConfiguration implements WebApplicationInitializer {
 

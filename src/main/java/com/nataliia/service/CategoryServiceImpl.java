@@ -1,13 +1,15 @@
 package com.nataliia.service;
 
 import com.nataliia.dao.CategoryRepository;
-import com.nataliia.jdbc_template_dao.CategoryDao;
 import com.nataliia.model.Category;
+import com.nataliia.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -40,4 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<Category> getByIdWithProducts(Long id) {
+        return categoryRepository.getById(id);
+    }
+
+    @Override
+    public Optional<Category> increaseProductsPriceBy10P(Category category) {
+        List<Product> products = category.getProducts().stream()
+                .peek(p -> p.setPrice(p.getPrice() * 1.1))
+                .collect(toList());
+
+        category.setProducts(products);
+        categoryRepository.save(category);
+        Optional<Category> c = categoryRepository.getById(category.getId());
+        return c;
+    }
 }
